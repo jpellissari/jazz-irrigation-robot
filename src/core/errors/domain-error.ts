@@ -1,3 +1,3 @@
 export interface IDomainError {
-  message: string
+  message: string;
 }
