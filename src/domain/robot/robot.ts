@@ -18,6 +18,7 @@ export class Robot {
     this._position = position;
     this._garden = garden;
     this._movements = [];
+    this.irrigatePatch();
   }
 
   get heading(): string {
@@ -32,8 +33,26 @@ export class Robot {
     return this._garden.size.value;
   }
 
+  get irrigablePatchesCoordinates(): Coordinate[] {
+    return this._garden.patches
+      .filter(patch => patch.isIrrigable)
+      .map(patch => patch.coordinate);
+  }
+
   get movements(): string[] {
     return this._movements;
+  }
+
+  private irrigatePatch(): void {
+    const isIrrigable = this.irrigablePatchesCoordinates.some(
+      irrigablePatch =>
+        irrigablePatch.value.x === this._position.value.x &&
+        irrigablePatch.value.y === this._position.value.y,
+    );
+
+    if (isIrrigable) {
+      this._movements.push('I');
+    }
   }
 
   private moveNorth(): Either<OutOfBoundsError, void> {
@@ -137,18 +156,30 @@ export class Robot {
   }
 
   move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
+    let moveOrError: Either<OutOfBoundsError, void>;
+
     switch (this.heading) {
       case 'N':
-        return this.moveNorth();
+        moveOrError = this.moveNorth();
+        this.irrigatePatch();
+        break;
       case 'S':
-        return this.moveSouth();
+        moveOrError = this.moveSouth();
+        this.irrigatePatch();
+        break;
       case 'L':
-        return this.moveEast();
+        moveOrError = this.moveEast();
+        this.irrigatePatch();
+        break;
       case 'O':
-        return this.moveWest();
+        moveOrError = this.moveWest();
+        this.irrigatePatch();
+        break;
       default:
         return left(new InvalidHeadingError());
     }
+
+    return moveOrError;
   }
 
   static create(
