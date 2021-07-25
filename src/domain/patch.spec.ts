@@ -17,6 +17,20 @@ describe('Patch Entiy', () => {
     expect(patchOrError).toEqual(left(new InvalidCoordinateError()))
   })
 
+  test('should be possible to get patch coordinates', () => {
+    const patchOrError = Patch.create({ x: 1, y: 1, isIrrigable: true })
+    const patch = patchOrError.isRight() ? patchOrError.value : null
+
+    expect(patch.coordinate.value).toEqual({ x: 1, y: 1 })
+  })
+
+  test('should be possible to check if patch is irrigable', () => {
+    const patchOrError = Patch.create({ x: 1, y: 1, isIrrigable: true })
+    const patch = patchOrError.isRight() ? patchOrError.value : null
+
+    expect(patch.isIrrigable).toEqual(true)
+  })
+
   test('should create Patch on success', () => {
     const patchOrError = Patch.create({ x: 1, y: 1, isIrrigable: true })
 
