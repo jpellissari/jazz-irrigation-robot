@@ -9,12 +9,20 @@ type createPatchDTO = {
 }
 
 export class Patch {
-  private coordinate: Coordinate
-  private isIrrigable: boolean
+  private _coordinate: Coordinate
+  private _isIrrigable: boolean
 
   private constructor (coordinate: Coordinate, isIrrigable: boolean) {
-    this.coordinate = coordinate
-    this.isIrrigable = isIrrigable
+    this._coordinate = coordinate
+    this._isIrrigable = isIrrigable
+  }
+
+  get coordinate (): Coordinate {
+    return this._coordinate
+  }
+
+  get isIrrigable (): boolean {
+    return this._isIrrigable
   }
 
   static create ({ x, y, isIrrigable }: createPatchDTO): Either<InvalidCoordinateError, Patch> {
