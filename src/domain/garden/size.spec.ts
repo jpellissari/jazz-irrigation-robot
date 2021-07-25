@@ -1,4 +1,4 @@
-import { left } from '../core/either'
+import { left } from '../../core/either'
 import { InvalidSizeError } from './errors/invalid-size-error'
 import { Size } from './size'
 

@@ -1,6 +1,6 @@
-import { Either, left, right } from '../core/either'
-import { Coordinate } from './coordinate'
-import { InvalidCoordinateError } from './errors/invalid-coordinate-error'
+import { Either, left, right } from '../../core/either'
+import { Coordinate } from '../shared/coordinate'
+import { InvalidCoordinateError } from '../shared/errors/invalid-coordinate-error'
 
 type createPatchDTO = {
   x: number

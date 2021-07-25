@@ -1,4 +1,4 @@
-import { Either, left, right } from '../core/either'
+import { Either, left, right } from '../../core/either'
 import { InvalidCoordinateError } from './errors/invalid-coordinate-error'
 
 export type coordinateType = {

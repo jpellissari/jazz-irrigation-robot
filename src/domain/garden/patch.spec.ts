@@ -1,5 +1,5 @@
-import { left } from '../core/either'
-import { InvalidCoordinateError } from './errors/invalid-coordinate-error'
+import { left } from '../../core/either'
+import { InvalidCoordinateError } from '../shared/errors/invalid-coordinate-error'
 import { Patch } from './patch'
 
 describe('Patch Entiy', () => {

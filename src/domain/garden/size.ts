@@ -1,4 +1,4 @@
-import { Either, left, right } from '../core/either'
+import { Either, left, right } from '../../core/either'
 import { InvalidSizeError } from './errors/invalid-size-error'
 
 export type sizeType = {
