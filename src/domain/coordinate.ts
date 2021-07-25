@@ -1,23 +1,30 @@
 import { Either, left, right } from '../core/either'
 import { InvalidCoordinateError } from './errors/invalid-coordinate-error'
 
-export class Coordinate {
-  private readonly coordinate: number
+type coordinateType = {
+  x: number
+  y: number
+}
 
-  private constructor (coordinate: number) {
-    this.coordinate = coordinate
+export class Coordinate {
+  private readonly x: number
+  private readonly y: number
+
+  private constructor (x: number, y: number) {
+    this.x = x
+    this.y = y
     Object.freeze(this)
   }
 
-  get value (): number {
-    return this.coordinate
+  get value (): coordinateType {
+    return { x: this.x, y: this.y }
   }
 
-  static create (coordinate: number): Either<InvalidCoordinateError, Coordinate> {
-    if (coordinate < 0) {
+  static create (x: number, y: number): Either<InvalidCoordinateError, Coordinate> {
+    if (x < 0 || y < 0) {
       return left(new InvalidCoordinateError())
     }
 
-    return right(new Coordinate(coordinate))
+    return right(new Coordinate(x,y))
   }
 }
