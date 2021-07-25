@@ -1,7 +1,7 @@
 import { Either, left, right } from '../core/either'
 import { InvalidSizeError } from './errors/invalid-size-error'
 
-type sizeType = {
+export type sizeType = {
   width: number
   height: number
 }
