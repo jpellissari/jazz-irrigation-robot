@@ -24,18 +24,6 @@ export class Robot {
     return this._heading.value;
   }
 
-  changeHeading(heading: string): Either<InvalidHeadingError, void> {
-    const headingOrError = Heading.create(heading);
-
-    if (headingOrError.isLeft()) {
-      return left(new InvalidHeadingError());
-    }
-
-    this._heading = headingOrError.value;
-
-    return right();
-  }
-
   get position(): coordinateType {
     return this._position.value;
   }
@@ -48,20 +36,7 @@ export class Robot {
     return this._movements;
   }
 
-  move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
-    switch (this.heading) {
-      case 'N':
-        return this.moveNorth();
-      case 'S':
-        return this.moveSouth();
-      case 'L':
-        return this.moveEast();
-      case 'O':
-        return this.moveWest();
-    }
-  }
-
-  private moveNorth(): Either<OutOfBoundsError | InvalidCoordinateError, void> {
+  private moveNorth(): Either<OutOfBoundsError, void> {
     const currentPosition = this.position;
     const newPositionOrError = Coordinate.create(
       currentPosition.x,
@@ -69,7 +44,7 @@ export class Robot {
     );
 
     if (newPositionOrError.isLeft()) {
-      return left(new InvalidCoordinateError());
+      return left(new OutOfBoundsError());
     }
 
     const newPosition = newPositionOrError.value;
@@ -147,6 +122,33 @@ export class Robot {
     this._movements.push('O');
     this._position = newPosition;
     return right();
+  }
+
+  changeHeading(heading: string): Either<InvalidHeadingError, void> {
+    const headingOrError = Heading.create(heading);
+
+    if (headingOrError.isLeft()) {
+      return left(new InvalidHeadingError());
+    }
+
+    this._heading = headingOrError.value;
+
+    return right();
+  }
+
+  move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
+    switch (this.heading) {
+      case 'N':
+        return this.moveNorth();
+      case 'S':
+        return this.moveSouth();
+      case 'L':
+        return this.moveEast();
+      case 'O':
+        return this.moveWest();
+      default:
+        return left(new InvalidHeadingError());
+    }
   }
 
   static create(
