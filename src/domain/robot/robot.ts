@@ -24,6 +24,18 @@ export class Robot {
     return this._heading.value;
   }
 
+  changeHeading(heading: string): Either<InvalidHeadingError, void> {
+    const headingOrError = Heading.create(heading);
+
+    if (headingOrError.isLeft()) {
+      return left(new InvalidHeadingError());
+    }
+
+    this._heading = headingOrError.value;
+
+    return right();
+  }
+
   get position(): coordinateType {
     return this._position.value;
   }
@@ -36,10 +48,16 @@ export class Robot {
     return this._movements;
   }
 
-  move(): Either<OutOfBoundsError, void> {
+  move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
     switch (this.heading) {
       case 'N':
         return this.moveNorth();
+      case 'S':
+        return this.moveSouth();
+      case 'L':
+        return this.moveEast();
+      case 'O':
+        return this.moveWest();
     }
   }
 
@@ -61,6 +79,72 @@ export class Robot {
     }
 
     this._movements.push('N');
+    this._position = newPosition;
+    return right();
+  }
+
+  private moveSouth(): Either<OutOfBoundsError, void> {
+    const currentPosition = this.position;
+    const newPositionOrError = Coordinate.create(
+      currentPosition.x,
+      currentPosition.y - 1,
+    );
+
+    if (newPositionOrError.isLeft()) {
+      return left(new OutOfBoundsError());
+    }
+
+    const newPosition = newPositionOrError.value;
+
+    if (newPosition.value.y < 0) {
+      return left(new OutOfBoundsError());
+    }
+
+    this._movements.push('S');
+    this._position = newPosition;
+    return right();
+  }
+
+  private moveEast(): Either<OutOfBoundsError, void> {
+    const currentPosition = this.position;
+    const newPositionOrError = Coordinate.create(
+      currentPosition.x + 1,
+      currentPosition.y,
+    );
+
+    if (newPositionOrError.isLeft()) {
+      return left(new OutOfBoundsError());
+    }
+
+    const newPosition = newPositionOrError.value;
+
+    if (newPosition.value.x > this.gardenSize.width - 1) {
+      return left(new OutOfBoundsError());
+    }
+
+    this._movements.push('L');
+    this._position = newPosition;
+    return right();
+  }
+
+  private moveWest(): Either<OutOfBoundsError, void> {
+    const currentPosition = this.position;
+    const newPositionOrError = Coordinate.create(
+      currentPosition.x - 1,
+      currentPosition.y,
+    );
+
+    if (newPositionOrError.isLeft()) {
+      return left(new OutOfBoundsError());
+    }
+
+    const newPosition = newPositionOrError.value;
+
+    if (newPosition.value.x < 0) {
+      return left(new OutOfBoundsError());
+    }
+
+    this._movements.push('O');
     this._position = newPosition;
     return right();
   }
