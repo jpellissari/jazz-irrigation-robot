@@ -23,4 +23,17 @@ describe('Garden Entiy', () => {
 
     expect(gardenOrError).toEqual(left(new InvalidSizeError()))
   })
+
+  test('should create Garden with patches', () => {
+    const size: sizeType = {
+      width: 4,
+      height: 4
+    }
+    const gardenOrError = Garden.create(size)
+    const garden = gardenOrError.isRight() ? gardenOrError.value : null
+
+    expect(gardenOrError.isRight()).toBeTruthy()
+    expect(garden.size).toEqual(size)
+    expect(garden.patches.length).toEqual(size.width * size.height)
+  })
 })
