@@ -65,4 +65,20 @@ describe('Robot Entity', () => {
     expect(moveOrError.isLeft()).toBeTruthy();
     expect(robot.movements).toEqual(['N']);
   });
+
+  test('should move robot one position to north on success', () => {
+    const garden = Garden.create({
+      size: { width: 2, height: 2 },
+      irrigablePatches: [{ x: 0, y: 0 }],
+    }).value as Garden;
+
+    const robotOrError = Robot.create(garden);
+    const robot = robotOrError.isRight() ? robotOrError.value : null;
+
+    const moveOrError = robot.move();
+
+    expect(robot.heading).toEqual('N');
+    expect(moveOrError.isRight()).toBeTruthy();
+    expect(robot.movements).toEqual(['N']);
+  });
 });
