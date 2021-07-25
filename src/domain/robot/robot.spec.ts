@@ -52,7 +52,7 @@ describe('Robot Entity', () => {
   test('should not move robot one position to north if out of bounds', () => {
     const garden = Garden.create({
       size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
+      irrigablePatches: [{ x: 1, y: 1 }],
     }).value as Garden;
 
     const robotOrError = Robot.create(garden);
@@ -151,7 +151,7 @@ describe('Robot Entity', () => {
   test('should move robot one position to north on success', () => {
     const garden = Garden.create({
       size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
+      irrigablePatches: [{ x: 1, y: 1 }],
     }).value as Garden;
 
     const robotOrError = Robot.create(garden);
@@ -162,5 +162,18 @@ describe('Robot Entity', () => {
     expect(robot.heading).toEqual('N');
     expect(moveOrError.isRight()).toBeTruthy();
     expect(robot.movements).toEqual(['N']);
+  });
+
+  test('should be able to irrigate patch on success', () => {
+    const garden = Garden.create({
+      size: { width: 2, height: 2 },
+      irrigablePatches: [{ x: 0, y: 0 }],
+    }).value as Garden;
+
+    const robotOrError = Robot.create(garden);
+    const robot = robotOrError.isRight() ? robotOrError.value : null;
+
+    expect(robot.heading).toEqual('N');
+    expect(robot.movements).toEqual(['I']);
   });
 });
