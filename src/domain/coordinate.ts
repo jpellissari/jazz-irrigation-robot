@@ -1,7 +1,7 @@
 import { Either, left, right } from '../core/either'
 import { InvalidCoordinateError } from './errors/invalid-coordinate-error'
 
-type coordinateType = {
+export type coordinateType = {
   x: number
   y: number
 }
