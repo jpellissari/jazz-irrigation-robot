@@ -4,17 +4,20 @@ import { sizeType } from '../garden/size';
 import { Coordinate, coordinateType } from '../shared/coordinate';
 import { InvalidCoordinateError } from '../shared/errors/invalid-coordinate-error';
 import { InvalidHeadingError } from './errors/invalid-heading-error';
+import { OutOfBoundsError } from './errors/out-of-bounds-error';
 import { Heading } from './heading';
 
 export class Robot {
   private _heading: Heading;
   private _position: Coordinate;
   private _garden: Garden;
+  private _movements: string[];
 
   private constructor(heading: Heading, position: Coordinate, garden: Garden) {
     this._heading = heading;
     this._position = position;
     this._garden = garden;
+    this._movements = [];
   }
 
   get heading(): string {
@@ -27,6 +30,39 @@ export class Robot {
 
   get gardenSize(): sizeType {
     return this._garden.size.value;
+  }
+
+  get movements(): string[] {
+    return this._movements;
+  }
+
+  move(): Either<OutOfBoundsError, void> {
+    switch (this.heading) {
+      case 'N':
+        return this.moveNorth();
+    }
+  }
+
+  private moveNorth(): Either<OutOfBoundsError | InvalidCoordinateError, void> {
+    const currentPosition = this.position;
+    const newPositionOrError = Coordinate.create(
+      currentPosition.x,
+      currentPosition.y + 1,
+    );
+
+    if (newPositionOrError.isLeft()) {
+      return left(new InvalidCoordinateError());
+    }
+
+    const newPosition = newPositionOrError.value;
+
+    if (newPosition.value.y > this.gardenSize.height - 1) {
+      return left(new OutOfBoundsError());
+    }
+
+    this._movements.push('N');
+    this._position = newPosition;
+    return right();
   }
 
   static create(
