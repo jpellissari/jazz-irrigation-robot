@@ -1,16 +1,16 @@
-import { createGardenDTO } from '../../../domain/garden/garden';
-import { ICreateGardenRepository } from '../../../repositories/create-garden';
+import { createGardenDTO, Garden } from '../../../domain/garden/garden';
+import { ISaveGardenRepository } from '../../../repositories/save-garden';
 import { ICreateGardenUseCase } from '../../protocols/create-garden-use-case';
 import { CreateGardenUseCase } from './create-garden-use-case';
 
-const makeFakeCreateGardenRepository = (): ICreateGardenRepository => {
-  class CreateGardenRepositoryStub implements ICreateGardenRepository {
-    async create(gardenData: createGardenDTO): Promise<void> {
+const makeFakeSaveGardenRepository = (): ISaveGardenRepository => {
+  class SaveGardenRepositoryStub implements ISaveGardenRepository {
+    async save(garden: Garden): Promise<void> {
       return new Promise(resolve => resolve());
     }
   }
 
-  return new CreateGardenRepositoryStub();
+  return new SaveGardenRepositoryStub();
 };
 
 const makeFakeCreateGardenDTO = (): createGardenDTO => ({
@@ -27,26 +27,29 @@ const makeFakeCreateGardenDTO = (): createGardenDTO => ({
 });
 
 type SutTypes = {
-  createGardenRepositoryStub: ICreateGardenRepository;
+  saveGardenRepositoryStub: ISaveGardenRepository;
   sut: ICreateGardenUseCase;
 };
 
 const makeSut = (): SutTypes => {
-  const createGardenRepositoryStub = makeFakeCreateGardenRepository();
-  const sut = new CreateGardenUseCase(createGardenRepositoryStub);
+  const saveGardenRepositoryStub = makeFakeSaveGardenRepository();
+  const sut = new CreateGardenUseCase(saveGardenRepositoryStub);
 
   return {
-    createGardenRepositoryStub,
+    saveGardenRepositoryStub,
     sut,
   };
 };
+
 describe('CreateGarden UseCase', () => {
-  test('should call CreateGardenRespository with correct params', async () => {
-    const { sut, createGardenRepositoryStub } = makeSut();
-    const createSpy = jest.spyOn(createGardenRepositoryStub, 'create');
+  test('should call SaveGardenRespository with correct params', async () => {
+    const { sut, saveGardenRepositoryStub } = makeSut();
+    const saveSpy = jest.spyOn(saveGardenRepositoryStub, 'save');
 
     await sut.execute(makeFakeCreateGardenDTO());
 
-    expect(createSpy).toHaveBeenCalledWith(makeFakeCreateGardenDTO());
+    expect(saveSpy).toHaveBeenCalledWith(
+      Garden.create(makeFakeCreateGardenDTO()).value,
+    );
   });
 });

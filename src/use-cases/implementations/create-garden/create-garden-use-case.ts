@@ -1,15 +1,13 @@
-import { Either, right } from '../../../core/either';
+import { Either, left, right } from '../../../core/either';
 import { InvalidSizeError } from '../../../domain/garden/errors/invalid-size-error';
 import { MissingIrrigablePatchError } from '../../../domain/garden/errors/missing-irrigable-patch-error';
 import { createGardenDTO, Garden } from '../../../domain/garden/garden';
 import { InvalidCoordinateError } from '../../../domain/shared/errors/invalid-coordinate-error';
-import { ICreateGardenRepository } from '../../../repositories/create-garden';
+import { ISaveGardenRepository } from '../../../repositories/save-garden';
 import { ICreateGardenUseCase } from '../../protocols/create-garden-use-case';
 
 export class CreateGardenUseCase implements ICreateGardenUseCase {
-  constructor(
-    private readonly createGardenRepository: ICreateGardenRepository,
-  ) {}
+  constructor(private readonly saveGardenRepository: ISaveGardenRepository) {}
 
   async execute({
     size,
@@ -20,7 +18,15 @@ export class CreateGardenUseCase implements ICreateGardenUseCase {
       Garden
     >
   > {
-    await this.createGardenRepository.create({ size, irrigablePatches });
+    const gardenOrError = Garden.create({ size, irrigablePatches });
+
+    if (gardenOrError.isLeft()) {
+      return left(gardenOrError.value);
+    }
+
+    const garden = gardenOrError.value;
+
+    await this.saveGardenRepository.save(garden);
 
     return right();
   }
