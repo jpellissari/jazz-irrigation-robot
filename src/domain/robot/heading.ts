@@ -5,7 +5,7 @@ export class Heading {
   private heading: string;
 
   private constructor(heading: string) {
-    this.heading = heading;
+    this.heading = heading.toUpperCase();
   }
 
   get value(): string {
