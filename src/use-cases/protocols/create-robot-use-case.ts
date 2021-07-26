@@ -5,10 +5,9 @@ import { InvalidCoordinateError } from '../../domain/shared/errors/invalid-coord
 
 export interface ICreateRobotUseCase {
   execute({
-    garden,
     initialHeading,
     initialPosition,
-  }: CreateRobotDTO): Promise<
+  }: Omit<CreateRobotDTO, 'garden'>): Promise<
     Either<InvalidHeadingError | InvalidCoordinateError, Robot>
   >;
 }
