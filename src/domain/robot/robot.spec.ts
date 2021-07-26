@@ -55,7 +55,7 @@ describe('Robot Entity', () => {
 
     expect(robot.heading).toEqual('N');
     expect(moveOrError.isLeft()).toBeTruthy();
-    expect(robot.movements).toEqual(['N']);
+    expect(robot.movements).toEqual(['M']);
   });
 
   test('should change turn left on success', () => {
@@ -126,7 +126,7 @@ describe('Robot Entity', () => {
 
     expect(robot.heading).toEqual('N');
     expect(moveOrError.isRight()).toBeTruthy();
-    expect(robot.movements).toEqual(['N']);
+    expect(robot.movements).toEqual(['M']);
   });
 
   test('should be able to find for irrigable patch on heading direction', () => {
