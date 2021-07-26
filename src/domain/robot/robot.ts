@@ -161,6 +161,21 @@ export class Robot {
     return right();
   }
 
+  searchOnColumn(): Either<false, coordinateType> {
+    let foundIrrigablePatch: Coordinate;
+    if (this.heading === ('N' || 'S')) {
+      foundIrrigablePatch = this.irrigablePatchesCoordinates.filter(
+        irrigablePatche => irrigablePatche.value.x === this.position.x,
+      )[0];
+    } else {
+      foundIrrigablePatch = this.irrigablePatchesCoordinates.filter(
+        irrigablePatche => irrigablePatche.value.y === this.position.y,
+      )[0];
+    }
+
+    return foundIrrigablePatch ? right(foundIrrigablePatch.value) : left(false);
+  }
+
   move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
     let moveOrError: Either<OutOfBoundsError, void>;
 
