@@ -1,5 +1,5 @@
 ### Backend Test
-[![Build Status](https://travis-ci.com/jpellissari/jazz-irrigation-robot.svg?branch=main)](https://travis-ci.com/jpellissari/jazz-irrigation-robot)
+[![Build Status](https://travis-ci.com/jpellissari/jazz-irrigation-robot.svg?branch=master)](https://travis-ci.com/jpellissari/jazz-irrigation-robot)
 [![Coverage Status](https://coveralls.io/repos/github/jpellissari/jazz-irrigation-robot/badge.svg?branch=master)](https://coveralls.io/github/jpellissari/jazz-irrigation-robot?branch=master)
 
 # Setup
