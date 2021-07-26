@@ -14,11 +14,12 @@ export type createGardenDTO = {
 export class Garden {
   private _size: Size;
   private _patches: Patch[];
+  private _irrigatedPatches: Patch[];
 
   private constructor(size: Size, patches: Patch[]) {
     this._size = size;
     this._patches = patches;
-    Object.freeze(this);
+    this._irrigatedPatches = [];
   }
 
   get size(): Size {
@@ -27,6 +28,20 @@ export class Garden {
 
   get patches(): Patch[] {
     return this._patches;
+  }
+
+  get irrigablePatchesCoordinates(): coordinateType[] {
+    return this._patches
+      .filter(patch => patch.isIrrigable)
+      .map(patch => patch.coordinate.value);
+  }
+
+  get irrigatedPatches(): Patch[] {
+    return this._irrigatedPatches;
+  }
+
+  addIrrigatedPatch(patch: Patch): void {
+    this._irrigatedPatches.push(patch);
   }
 
   static create({

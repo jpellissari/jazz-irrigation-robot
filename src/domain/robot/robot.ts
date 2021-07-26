@@ -39,21 +39,15 @@ export class Robot {
     return this._garden.size.value;
   }
 
-  get irrigablePatchesCoordinates(): Coordinate[] {
-    return this._garden.patches
-      .filter(patch => patch.isIrrigable)
-      .map(patch => patch.coordinate);
-  }
-
   get movements(): string[] {
     return this._movements;
   }
 
   private irrigatePatch(): void {
-    const isIrrigable = this.irrigablePatchesCoordinates.some(
+    const isIrrigable = this._garden.irrigablePatchesCoordinates.some(
       irrigablePatch =>
-        irrigablePatch.value.x === this._position.value.x &&
-        irrigablePatch.value.y === this._position.value.y,
+        irrigablePatch.x === this._position.value.x &&
+        irrigablePatch.y === this._position.value.y,
     );
 
     if (isIrrigable) {
@@ -196,18 +190,18 @@ export class Robot {
   }
 
   searchIrrigablePatchOnHeading(): Either<false, coordinateType> {
-    let foundIrrigablePatch: Coordinate;
+    let foundIrrigablePatch: coordinateType;
     if (this.heading === ('N' || 'S')) {
-      foundIrrigablePatch = this.irrigablePatchesCoordinates.filter(
-        irrigablePatche => irrigablePatche.value.x === this.position.x,
+      foundIrrigablePatch = this._garden.irrigablePatchesCoordinates.filter(
+        irrigablePatche => irrigablePatche.x === this.position.x,
       )[0];
     } else {
-      foundIrrigablePatch = this.irrigablePatchesCoordinates.filter(
-        irrigablePatche => irrigablePatche.value.y === this.position.y,
+      foundIrrigablePatch = this._garden.irrigablePatchesCoordinates.filter(
+        irrigablePatche => irrigablePatche.y === this.position.y,
       )[0];
     }
 
-    return foundIrrigablePatch ? right(foundIrrigablePatch.value) : left(false);
+    return foundIrrigablePatch ? right(foundIrrigablePatch) : left(false);
   }
 
   move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
