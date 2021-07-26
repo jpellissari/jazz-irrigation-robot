@@ -149,14 +149,48 @@ export class Robot {
     return right();
   }
 
-  changeHeading(heading: string): Either<InvalidHeadingError, void> {
-    const headingOrError = Heading.create(heading);
+  turnLeft(): Either<InvalidHeadingError, void> {
+    const headingsOrder = ['N', 'O', 'S', 'L'];
+    const headingIndex = headingsOrder.findIndex(
+      heading => heading === this.heading,
+    );
+
+    const newHeading =
+      headingIndex < headingsOrder.length - 1
+        ? headingsOrder[headingIndex + 1]
+        : headingsOrder[0];
+
+    const headingOrError = Heading.create(newHeading);
 
     if (headingOrError.isLeft()) {
       return left(new InvalidHeadingError());
     }
 
     this._heading = headingOrError.value;
+    this._movements.push('E');
+
+    return right();
+  }
+
+  turnRight(): Either<InvalidHeadingError, void> {
+    const headingsOrder = ['N', 'L', 'S', 'O'];
+    const headingIndex = headingsOrder.findIndex(
+      heading => heading === this.heading,
+    );
+
+    const newHeading =
+      headingIndex < headingsOrder.length - 1
+        ? headingsOrder[headingIndex + 1]
+        : headingsOrder[0];
+
+    const headingOrError = Heading.create(newHeading);
+
+    if (headingOrError.isLeft()) {
+      return left(new InvalidHeadingError());
+    }
+
+    this._heading = headingOrError.value;
+    this._movements.push('D');
 
     return right();
   }
