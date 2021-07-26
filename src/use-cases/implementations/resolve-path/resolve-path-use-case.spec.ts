@@ -134,6 +134,45 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['M', 'M']);
+    expect(response.movements.slice(0, 2)).toEqual(['M', 'M']);
+  });
+
+  test('should move robot to irrigablePatch when irrigatePatch.x is smaller than robot x position', async () => {
+    const garden = Garden.create({
+      size: { width: 4, height: 4 },
+      irrigablePatches: [{ x: 1, y: 3 }],
+    }).value as Garden;
+
+    const robot = Robot.create({
+      garden,
+      initialPosition: { x: 3, y: 1 },
+      initialHeading: 'O',
+    }).value as Robot;
+
+    const sut = new ResolvePathUseCase(robot);
+    const response = await sut.execute();
+
+    expect(response.movements).toEqual(robot.movements);
+    expect(response.finalHeading).toEqual(robot.heading);
+    expect(response.movements.slice(0, 2)).toEqual(['M', 'M']);
+  });
+
+  test('should irrigate patch', async () => {
+    const garden = Garden.create({
+      size: { width: 4, height: 4 },
+      irrigablePatches: [{ x: 1, y: 2 }],
+    }).value as Garden;
+
+    const robot = Robot.create({
+      garden,
+      initialPosition: { x: 3, y: 1 },
+    }).value as Robot;
+
+    const sut = new ResolvePathUseCase(robot);
+    const response = await sut.execute();
+
+    expect(response.movements).toEqual(robot.movements);
+    expect(response.finalHeading).toEqual(robot.heading);
+    expect(response.movements).toEqual(['E', 'M', 'M', 'D', 'M', 'I']);
   });
 });
