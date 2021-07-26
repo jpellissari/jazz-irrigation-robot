@@ -12,8 +12,8 @@ describe('ResolvePath UseCase', () => {
     const robot = Robot.create({ garden, initialPosition: { x: 0, y: 1 } })
       .value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -32,8 +32,8 @@ describe('ResolvePath UseCase', () => {
       initialHeading: 'S',
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -52,8 +52,8 @@ describe('ResolvePath UseCase', () => {
       initialHeading: 'O',
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -69,8 +69,8 @@ describe('ResolvePath UseCase', () => {
     const robot = Robot.create({ garden, initialPosition: { x: 3, y: 1 } })
       .value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -89,8 +89,8 @@ describe('ResolvePath UseCase', () => {
       initialHeading: 'S',
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -109,8 +109,8 @@ describe('ResolvePath UseCase', () => {
       initialHeading: 'L',
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -129,8 +129,8 @@ describe('ResolvePath UseCase', () => {
       initialHeading: 'L',
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -149,8 +149,8 @@ describe('ResolvePath UseCase', () => {
       initialHeading: 'O',
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
@@ -168,8 +168,8 @@ describe('ResolvePath UseCase', () => {
       initialPosition: { x: 3, y: 1 },
     }).value as Robot;
 
-    const sut = new ResolvePathUseCase(robot);
-    const response = await sut.execute();
+    const sut = new ResolvePathUseCase();
+    const response = await sut.execute(robot);
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);

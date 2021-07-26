@@ -5,8 +5,10 @@ import {
 } from '../../protocols/resolve-path-use-case';
 
 export class ResolvePathUseCase implements IResolvePathUseCase {
-  constructor(private robot: Robot) {}
-  async execute(): Promise<ResolvePathResponse> {
+  private robot: Robot;
+  async execute(robot: Robot): Promise<ResolvePathResponse> {
+    this.robot = robot;
+
     const gardenIrrigablePatches = this.robot.gardenIrrigablePatches;
 
     for (const irrigablePatch of gardenIrrigablePatches) {
