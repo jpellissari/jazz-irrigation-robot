@@ -1,61 +1,48 @@
 import { Garden } from '../garden/garden';
-import { Robot } from './robot';
+import { CreateRobotDTO, Robot } from './robot';
 
+const makeFakeCreateRobotDTO = (
+  irrigablePatches = [{ x: 0, y: 0 }],
+): CreateRobotDTO => {
+  const garden = Garden.create({
+    size: { width: 2, height: 2 },
+    irrigablePatches,
+  }).value as Garden;
+
+  return {
+    garden,
+  };
+};
 describe('Robot Entity', () => {
   test('should create a robot on success', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
 
     expect(robotOrError.isRight()).toBeTruthy();
   });
 
   test("should return robot's garden size on success", () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     expect(robot.gardenSize).toEqual({ width: 2, height: 2 });
   });
 
   test("should return robot's position on success", () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     expect(robot.position).toEqual({ x: 0, y: 0 });
   });
 
   test("should return robot's heading on success", () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     expect(robot.heading).toEqual('N');
   });
 
   test('should not move robot one position to north if out of bounds', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 1, y: 1 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO([{ x: 1, y: 1 }]));
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     robot.move();
@@ -67,12 +54,7 @@ describe('Robot Entity', () => {
   });
 
   test('should change robot heading on success', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     const changeHeadingOrError = robot.changeHeading('S');
@@ -82,12 +64,7 @@ describe('Robot Entity', () => {
   });
 
   test('should not change robot heading if heading is invalid', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     const changeHeadingOrError = robot.changeHeading('invalid_heading');
@@ -97,12 +74,7 @@ describe('Robot Entity', () => {
   });
 
   test('should not move robot one position to south if out of bounds', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     robot.changeHeading('S');
@@ -114,12 +86,7 @@ describe('Robot Entity', () => {
   });
 
   test('should not move robot one position to west if out of bounds', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     robot.changeHeading('O');
@@ -131,12 +98,7 @@ describe('Robot Entity', () => {
   });
 
   test('should not move robot one position to east if out of bounds', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     robot.changeHeading('L');
@@ -149,12 +111,7 @@ describe('Robot Entity', () => {
   });
 
   test('should move robot one position to north on success', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 1, y: 1 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO([{ x: 1, y: 1 }]));
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     const moveOrError = robot.move();
@@ -165,12 +122,7 @@ describe('Robot Entity', () => {
   });
 
   test('should be able to irrigate patch on success', () => {
-    const garden = Garden.create({
-      size: { width: 2, height: 2 },
-      irrigablePatches: [{ x: 0, y: 0 }],
-    }).value as Garden;
-
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
     expect(robot.heading).toEqual('N');

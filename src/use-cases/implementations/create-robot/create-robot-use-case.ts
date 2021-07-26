@@ -12,7 +12,7 @@ export class CreateRobotUseCase implements ICreateRobotUseCase {
   async execute(
     garden: Garden,
   ): Promise<Either<InvalidHeadingError | InvalidCoordinateError, Robot>> {
-    const robotOrError = Robot.create(garden);
+    const robotOrError = Robot.create({ garden });
 
     if (robotOrError.isLeft()) {
       return left(robotOrError.value);

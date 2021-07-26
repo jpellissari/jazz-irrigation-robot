@@ -50,6 +50,6 @@ describe('CreateRobot UseCase', () => {
     const garden = Garden.create(makeFakeCreateGardenDTO()).value as Garden;
     await sut.execute(garden);
 
-    expect(saveSpy).toHaveBeenCalledWith(Robot.create(garden).value);
+    expect(saveSpy).toHaveBeenCalledWith(Robot.create({ garden }).value);
   });
 });

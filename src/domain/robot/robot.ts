@@ -7,6 +7,12 @@ import { InvalidHeadingError } from './errors/invalid-heading-error';
 import { OutOfBoundsError } from './errors/out-of-bounds-error';
 import { Heading } from './heading';
 
+export type CreateRobotDTO = {
+  garden: Garden;
+  initialPosition?: coordinateType;
+  initialHeading?: string;
+};
+
 export class Robot {
   private _heading: Heading;
   private _position: Coordinate;
@@ -182,11 +188,17 @@ export class Robot {
     return moveOrError;
   }
 
-  static create(
-    garden: Garden,
-  ): Either<InvalidHeadingError | InvalidCoordinateError, Robot> {
-    const headingOrError = Heading.create('N');
-    const positionOrError = Coordinate.create(0, 0);
+  static create({
+    garden,
+    initialPosition = { x: 0, y: 0 },
+    initialHeading = 'N',
+  }: CreateRobotDTO): Either<
+    InvalidHeadingError | InvalidCoordinateError,
+    Robot
+  > {
+    const { x, y } = initialPosition;
+    const headingOrError = Heading.create(initialHeading);
+    const positionOrError = Coordinate.create(x, y);
 
     if (headingOrError.isLeft()) {
       return left(headingOrError.value);
