@@ -12,6 +12,8 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
       if (irrigablePatch.x > robot.position.x) {
         if (robot.heading === 'N') {
           robot.turnRight();
+        } else if (robot.heading === 'S') {
+          robot.turnLeft();
         }
       }
     }
