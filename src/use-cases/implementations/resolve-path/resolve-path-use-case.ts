@@ -14,6 +14,9 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
           robot.turnRight();
         } else if (robot.heading === 'S') {
           robot.turnLeft();
+        } else if (robot.heading === 'O') {
+          robot.turnLeft();
+          robot.turnLeft();
         }
       }
     }
