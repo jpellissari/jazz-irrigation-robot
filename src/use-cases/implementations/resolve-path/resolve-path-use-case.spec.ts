@@ -17,7 +17,7 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['D']);
+    expect(response.movements.slice(0, 1)).toEqual(['D']);
   });
 
   test('should move robot to left if robot heading is S and irrigatePatch.x is grater than robot x position', async () => {
@@ -37,7 +37,7 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['E']);
+    expect(response.movements.slice(0, 1)).toEqual(['E']);
   });
 
   test('should invert robot if robot heading is west and irrigatePatch.x is grater than robot x position', async () => {
@@ -57,7 +57,7 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['E', 'E']);
+    expect(response.movements.slice(0, 2)).toEqual(['E', 'E']);
   });
 
   test('should move robot to right if robot heading is N and irrigatePatch.x is smaller than robot x position', async () => {
@@ -74,7 +74,7 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['E']);
+    expect(response.movements.slice(0, 1)).toEqual(['E']);
   });
 
   test('should move robot to left if robot heading is S and irrigatePatch.x is smaller than robot x position', async () => {
@@ -94,7 +94,7 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['D']);
+    expect(response.movements.slice(0, 1)).toEqual(['D']);
   });
 
   test('should invert robot if robot heading is east and irrigatePatch.x is smaller than robot x position', async () => {
@@ -114,6 +114,6 @@ describe('ResolvePath UseCase', () => {
 
     expect(response.movements).toEqual(robot.movements);
     expect(response.finalHeading).toEqual(robot.heading);
-    expect(response.movements).toEqual(['E', 'E']);
+    expect(response.movements.slice(0, 2)).toEqual(['E', 'E']);
   });
 });
