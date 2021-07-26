@@ -8,9 +8,18 @@ export const adaptRoute = async (
   const consoleResponse = await controller.handle(controllerData);
   if (consoleResponse.statusCode > 299) {
     console.log(consoleResponse.body.message);
+    return;
   }
 
   if (consoleResponse.statusCode === 201) {
     console.log('criado');
+    return;
   }
+
+  if (consoleResponse.statusCode === 200) {
+    console.log(consoleResponse.body);
+    return;
+  }
+
+  console.log(consoleResponse);
 };
