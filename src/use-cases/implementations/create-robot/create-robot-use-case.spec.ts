@@ -48,8 +48,36 @@ describe('CreateRobot UseCase', () => {
     const saveSpy = jest.spyOn(saveRobotRepositoryStub, 'save');
 
     const garden = Garden.create(makeFakeCreateGardenDTO()).value as Garden;
-    await sut.execute(garden);
+    await sut.execute({
+      garden,
+      initialHeading: 's',
+      initialPosition: { x: 1, y: 1 },
+    });
 
-    expect(saveSpy).toHaveBeenCalledWith(Robot.create({ garden }).value);
+    expect(saveSpy).toHaveBeenCalledWith(
+      Robot.create({
+        garden,
+        initialHeading: 's',
+        initialPosition: { x: 1, y: 1 },
+      }).value,
+    );
+  });
+
+  test('should call SaveRobotRespository with default values', async () => {
+    const { sut, saveRobotRepositoryStub } = makeSut();
+    const saveSpy = jest.spyOn(saveRobotRepositoryStub, 'save');
+
+    const garden = Garden.create(makeFakeCreateGardenDTO()).value as Garden;
+    await sut.execute({
+      garden,
+    });
+
+    expect(saveSpy).toHaveBeenCalledWith(
+      Robot.create({
+        garden,
+        initialHeading: 'N',
+        initialPosition: { x: 0, y: 0 },
+      }).value,
+    );
   });
 });
