@@ -58,31 +58,34 @@ describe('Robot Entity', () => {
     expect(robot.movements).toEqual(['N']);
   });
 
-  test('should change robot heading on success', () => {
+  test('should change turn left on success', () => {
     const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
-    const changeHeadingOrError = robot.changeHeading('S');
+    const changeHeadingOrError = robot.turnLeft();
 
-    expect(robot.heading).toEqual('S');
+    expect(robot.heading).toEqual('O');
     expect(changeHeadingOrError.isRight()).toBeTruthy();
+    expect(robot.movements).toEqual(['I', 'E']);
   });
 
-  test('should not change robot heading if heading is invalid', () => {
+  test('should turn right on success', () => {
     const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
-    const changeHeadingOrError = robot.changeHeading('invalid_heading');
+    const changeHeadingOrError = robot.turnRight();
 
-    expect(robot.heading).toEqual('N');
-    expect(changeHeadingOrError.isLeft()).toBeTruthy();
+    expect(robot.heading).toEqual('L');
+    expect(changeHeadingOrError.isRight()).toBeTruthy();
+    expect(robot.movements).toEqual(['I', 'D']);
   });
 
   test('should not move robot one position to south if out of bounds', () => {
     const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
-    robot.changeHeading('S');
+    robot.turnLeft();
+    robot.turnLeft();
 
     const moveOrError = robot.move();
 
@@ -94,7 +97,7 @@ describe('Robot Entity', () => {
     const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
-    robot.changeHeading('O');
+    robot.turnLeft();
 
     const moveOrError = robot.move();
 
@@ -106,7 +109,7 @@ describe('Robot Entity', () => {
     const robotOrError = Robot.create(makeFakeCreateRobotDTO());
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
-    robot.changeHeading('L');
+    robot.turnRight();
 
     robot.move();
     const moveOrError = robot.move();
