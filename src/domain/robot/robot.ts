@@ -39,12 +39,16 @@ export class Robot {
     return this._garden.size.value;
   }
 
+  get gardenIrrigablePatches(): coordinateType[] {
+    return this._garden.irrigablePatchesCoordinates;
+  }
+
   get movements(): string[] {
     return this._movements;
   }
 
   private irrigatePatch(): void {
-    const isIrrigable = this._garden.irrigablePatchesCoordinates.some(
+    const isIrrigable = this.gardenIrrigablePatches.some(
       irrigablePatch =>
         irrigablePatch.x === this._position.value.x &&
         irrigablePatch.y === this._position.value.y,
@@ -192,11 +196,11 @@ export class Robot {
   searchIrrigablePatchOnHeading(): Either<false, coordinateType> {
     let foundIrrigablePatch: coordinateType;
     if (this.heading === ('N' || 'S')) {
-      foundIrrigablePatch = this._garden.irrigablePatchesCoordinates.filter(
+      foundIrrigablePatch = this.gardenIrrigablePatches.filter(
         irrigablePatche => irrigablePatche.x === this.position.x,
       )[0];
     } else {
-      foundIrrigablePatch = this._garden.irrigablePatchesCoordinates.filter(
+      foundIrrigablePatch = this.gardenIrrigablePatches.filter(
         irrigablePatche => irrigablePatche.y === this.position.y,
       )[0];
     }
