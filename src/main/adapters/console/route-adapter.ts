@@ -1,12 +1,16 @@
 import { IConsoleRequest } from '../../../presentation/protocol/console';
 import { IConsoleController } from '../../../presentation/protocol/console-controller';
 
-export const adaptRoute = (
+export const adaptRoute = async (
   controller: IConsoleController,
   controllerData: IConsoleRequest,
-) => {
-  return async (): Promise<void> => {
-    const consoleResponse = await controller.handle(controllerData);
-    console.log(consoleResponse);
-  };
+): Promise<void> => {
+  const consoleResponse = await controller.handle(controllerData);
+  if (consoleResponse.statusCode > 299) {
+    console.log(consoleResponse.body.message);
+  }
+
+  if (consoleResponse.statusCode === 201) {
+    console.log('criado');
+  }
 };
