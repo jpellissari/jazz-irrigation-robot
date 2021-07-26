@@ -47,24 +47,8 @@ export class Robot {
     return this._movements;
   }
 
-  private irrigatePatch(): void {
-    const isIrrigable = this.gardenIrrigablePatches.some(
-      irrigablePatch =>
-        irrigablePatch.x === this._position.value.x &&
-        irrigablePatch.y === this._position.value.y,
-    );
-
-    if (isIrrigable) {
-      this._movements.push('I');
-    }
-  }
-
-  private moveNorth(): Either<OutOfBoundsError, void> {
-    const currentPosition = this.position;
-    const newPositionOrError = Coordinate.create(
-      currentPosition.x,
-      currentPosition.y + 1,
-    );
+  private setPosition(x: number, y: number): Either<OutOfBoundsError, void> {
+    const newPositionOrError = Coordinate.create(x, y);
 
     if (newPositionOrError.isLeft()) {
       return left(new OutOfBoundsError());
@@ -72,77 +56,13 @@ export class Robot {
 
     const newPosition = newPositionOrError.value;
 
-    if (newPosition.value.y > this.gardenSize.height - 1) {
+    if (
+      newPosition.value.y > this.gardenSize.height - 1 ||
+      newPosition.value.x > this.gardenSize.width - 1
+    ) {
       return left(new OutOfBoundsError());
     }
 
-    this._movements.push('N');
-    this._position = newPosition;
-    return right();
-  }
-
-  private moveSouth(): Either<OutOfBoundsError, void> {
-    const currentPosition = this.position;
-    const newPositionOrError = Coordinate.create(
-      currentPosition.x,
-      currentPosition.y - 1,
-    );
-
-    if (newPositionOrError.isLeft()) {
-      return left(new OutOfBoundsError());
-    }
-
-    const newPosition = newPositionOrError.value;
-
-    if (newPosition.value.y < 0) {
-      return left(new OutOfBoundsError());
-    }
-
-    this._movements.push('S');
-    this._position = newPosition;
-    return right();
-  }
-
-  private moveEast(): Either<OutOfBoundsError, void> {
-    const currentPosition = this.position;
-    const newPositionOrError = Coordinate.create(
-      currentPosition.x + 1,
-      currentPosition.y,
-    );
-
-    if (newPositionOrError.isLeft()) {
-      return left(new OutOfBoundsError());
-    }
-
-    const newPosition = newPositionOrError.value;
-
-    if (newPosition.value.x > this.gardenSize.width - 1) {
-      return left(new OutOfBoundsError());
-    }
-
-    this._movements.push('L');
-    this._position = newPosition;
-    return right();
-  }
-
-  private moveWest(): Either<OutOfBoundsError, void> {
-    const currentPosition = this.position;
-    const newPositionOrError = Coordinate.create(
-      currentPosition.x - 1,
-      currentPosition.y,
-    );
-
-    if (newPositionOrError.isLeft()) {
-      return left(new OutOfBoundsError());
-    }
-
-    const newPosition = newPositionOrError.value;
-
-    if (newPosition.value.x < 0) {
-      return left(new OutOfBoundsError());
-    }
-
-    this._movements.push('O');
     this._position = newPosition;
     return right();
   }
@@ -208,31 +128,44 @@ export class Robot {
     return foundIrrigablePatch ? right(foundIrrigablePatch) : left(false);
   }
 
-  move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
-    let moveOrError: Either<OutOfBoundsError, void>;
+  irrigatePatch(): void {
+    const isIrrigable = this.gardenIrrigablePatches.some(
+      irrigablePatch =>
+        irrigablePatch.x === this._position.value.x &&
+        irrigablePatch.y === this._position.value.y,
+    );
 
+    if (isIrrigable) {
+      this._movements.push('I');
+    }
+  }
+
+  move(): Either<OutOfBoundsError | InvalidHeadingError, void> {
+    let newPositionOrError: Either<OutOfBoundsError, void>;
+    const { x, y } = this.position;
     switch (this.heading) {
       case 'N':
-        moveOrError = this.moveNorth();
-        this.irrigatePatch();
+        newPositionOrError = this.setPosition(x, y + 1);
         break;
       case 'S':
-        moveOrError = this.moveSouth();
-        this.irrigatePatch();
+        newPositionOrError = this.setPosition(x, y - 1);
         break;
       case 'L':
-        moveOrError = this.moveEast();
-        this.irrigatePatch();
+        newPositionOrError = this.setPosition(x + 1, y);
         break;
       case 'O':
-        moveOrError = this.moveWest();
-        this.irrigatePatch();
+        newPositionOrError = this.setPosition(x - 1, y);
         break;
       default:
         return left(new InvalidHeadingError());
     }
 
-    return moveOrError;
+    if (newPositionOrError.isLeft()) {
+      return left(newPositionOrError.value);
+    }
+
+    this._movements.push('M');
+    return right();
   }
 
   static create({
