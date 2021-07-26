@@ -1,9 +1,10 @@
-import { GardenRepository } from '../../../repositories/implementations/garden-repository';
+import { createGardenRepositorySingleton } from '../../../repositories/implementations';
 import { CreateGardenController } from './create-garden-controller';
 import { CreateGardenUseCase } from './create-garden-use-case';
 
-const gardenRepository = new GardenRepository();
-const createGardenUseCase = new CreateGardenUseCase(gardenRepository);
+const createGardenUseCase = new CreateGardenUseCase(
+  createGardenRepositorySingleton,
+);
 
 const createGardenController = new CreateGardenController(createGardenUseCase);
 
