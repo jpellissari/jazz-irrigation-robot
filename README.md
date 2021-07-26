@@ -1,15 +1,14 @@
 ### Backend Test
 [![Build Status](https://travis-ci.com/jpellissari/jazz-irrigation-robot.svg?branch=main)](https://travis-ci.com/jpellissari/jazz-irrigation-robot)
 [![Coverage Status](https://coveralls.io/repos/github/jpellissari/jazz-irrigation-robot/badge.svg?branch=master)](https://coveralls.io/github/jpellissari/jazz-irrigation-robot?branch=master)
-# Setup
 
-## Requisitos
-### Rodando localmente via nodeJS
+# Setup
+## Rodando localmente via nodeJS
   1. Abrir a pasta raiz do projeto via console
   2. `yarn` ou `npm install` para instalar as dependencias
   3. `yarn start` ou `npm run start` para subir o servidor iniciar a aplicação console
 
-## Comandos
+# Comandos
   Ao rodar o programa o menu é exibido:
   ```
   Hortaliças e Hortaliças: resolução de caminho para robo irrigador
@@ -32,6 +31,41 @@ A partir deste ponto o programa está aguardando um comando para continuar.
 - criar-robo: Cria o robo informando qual a posição inicial e para onde o robo está apontando 
 - resolver: Resolve o problema de irrigação retornando qual foi o caminho utilizado pelo robo e qual a direção que ele está apontando ao final da execução.
 - ajuda: exibe o menu com instruções do programa
+
+## Padrões de parâmetros
+### Tamanho
+O tamanho deve ser informado da seguinte maneira:
+(largura, altura)
+Por exemplo, para criar uma horta de tamanho 4x4, deverá ser informado o valor '(4,4)' quando solicitado.
+
+### Coordenada
+As coordenadas devem seguir o padrão (x, y).
+Então caso queira informar a posição inicial do robo como sendo 0,0; o valor '(0,0)' deverá ser informado quando solicitado.
+
+### Direção 
+A direção do robo possui 4 valores possíveis (N, S, L, O). Para informar que o robo está apontando para norte, por exemplo, o valor 'N' deverá ser informado quando solicitado.
+
+## Criação da Horta
+Para criar a horta é necessário informar alguns parâmetros:
+1. Tamanho da horta
+2. Quais canteiros serão irrigados
+
+O tamanho da horta deverá seguir o padrão de tamanho informado a seguir, já os valores de canteiros a serem irrigados deverão ser digitados um por vez seguindo o padrão de coordenada! Ao finalizar de digitar os canteiros a serem irrigados é só pressionar enter que a horta será cadastrada e o programa continuará a execução.
+
+## Criação do Robo
+Para criar o robo mais dois parâmetros são necessários:
+1. Posição inicial do robo
+2. Direção que está apontado
+
+Quando solicitado deverá ser digitado a posição inicial seguindo o padrão de coordenada e a direção seguindo o padrão de direção.
+
+## Resolução do Problema
+Após cadastrar uma horta e um robo, o programa estará apto a resolver o problema. Para isso basta digitar o comando 'resolver' que a saída será apresentada com os movimentos utilizados e a direção final do robo.
+
+## Fluxo para resolução do problema
+1. Criar uma horta
+2. Criar um robo
+3. Resolver o problema
 
 # Requisitos
 Alguns requisitos que utilizei para auxiliar no desenvolvimento podem ser encontrados aqui:
