@@ -139,7 +139,7 @@ describe('Robot Entity', () => {
     );
     const robot = robotOrError.isRight() ? robotOrError.value : null;
 
-    const searchOrError = robot.searchOnColumn();
+    const searchOrError = robot.searchIrrigablePatchOnHeading();
 
     expect(robot.heading).toEqual('N');
     expect(searchOrError.isRight()).toBeTruthy();

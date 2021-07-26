@@ -195,7 +195,7 @@ export class Robot {
     return right();
   }
 
-  searchOnColumn(): Either<false, coordinateType> {
+  searchIrrigablePatchOnHeading(): Either<false, coordinateType> {
     let foundIrrigablePatch: Coordinate;
     if (this.heading === ('N' || 'S')) {
       foundIrrigablePatch = this.irrigablePatchesCoordinates.filter(
