@@ -12,10 +12,21 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
     for (const irrigablePatch of gardenIrrigablePatches) {
       if (irrigablePatch.x > this.robot.position.x) {
         this.turnRobotEast();
-        this.moveEast(irrigablePatch.x - this.robot.position.x);
+        this.moveSteps(irrigablePatch.x - this.robot.position.x);
       } else if (irrigablePatch.x < this.robot.position.x) {
         this.turnRobotWest();
+        this.moveSteps(this.robot.position.x - irrigablePatch.x);
       }
+
+      if (irrigablePatch.y > this.robot.position.y) {
+        this.turnRobotNorth();
+        this.moveSteps(irrigablePatch.y - this.robot.position.y);
+      } else if (irrigablePatch.x < this.robot.position.x) {
+        this.turnRobotSouth();
+        this.moveSteps(this.robot.position.y - irrigablePatch.y);
+      }
+
+      this.robot.irrigatePatch();
     }
 
     return {
@@ -68,7 +79,7 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
     }
   }
 
-  private moveEast(steps: number): void {
+  private moveSteps(steps: number): void {
     for (let i = 0; i < steps; i++) {
       this.robot.move();
     }
