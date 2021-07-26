@@ -12,6 +12,7 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
     for (const irrigablePatch of gardenIrrigablePatches) {
       if (irrigablePatch.x > this.robot.position.x) {
         this.turnRobotEast();
+        this.moveEast(irrigablePatch.x - this.robot.position.x);
       } else if (irrigablePatch.x < this.robot.position.x) {
         this.turnRobotWest();
       }
@@ -42,6 +43,34 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
     } else if (this.robot.heading === 'O') {
       this.robot.turnLeft();
       this.robot.turnLeft();
+    }
+  }
+
+  private turnRobotNorth(): void {
+    if (this.robot.heading === 'O') {
+      this.robot.turnRight();
+    } else if (this.robot.heading === 'L') {
+      this.robot.turnLeft();
+    } else if (this.robot.heading === 'S') {
+      this.robot.turnLeft();
+      this.robot.turnLeft();
+    }
+  }
+
+  private turnRobotSouth(): void {
+    if (this.robot.heading === 'O') {
+      this.robot.turnLeft();
+    } else if (this.robot.heading === 'L') {
+      this.robot.turnRight();
+    } else if (this.robot.heading === 'N') {
+      this.robot.turnLeft();
+      this.robot.turnLeft();
+    }
+  }
+
+  private moveEast(steps: number): void {
+    for (let i = 0; i < steps; i++) {
+      this.robot.move();
     }
   }
 }
