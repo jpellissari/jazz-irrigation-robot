@@ -1,4 +1,5 @@
 import { Robot } from '../../../domain/robot/robot';
+import { IGetRobotRepository } from '../../../repositories/get-robot';
 import {
   IResolvePathUseCase,
   ResolvePathResponse,
@@ -6,8 +7,11 @@ import {
 
 export class ResolvePathUseCase implements IResolvePathUseCase {
   private robot: Robot;
-  async execute(robot: Robot): Promise<ResolvePathResponse> {
-    this.robot = robot;
+
+  constructor(private readonly getRobotRepository: IGetRobotRepository) {}
+
+  async execute(): Promise<ResolvePathResponse> {
+    this.robot = await this.getRobotRepository.get();
 
     const gardenIrrigablePatches = this.robot.gardenIrrigablePatches;
 
