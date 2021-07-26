@@ -19,8 +19,6 @@ export class CreateGardenController {
       return { statusCode: 400, body: gardenOrError.value };
     }
 
-    const garden = gardenOrError.value;
-    console.log(garden);
     return { statusCode: 201 };
   }
 }
