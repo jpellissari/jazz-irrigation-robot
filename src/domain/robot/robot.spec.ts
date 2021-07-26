@@ -3,14 +3,19 @@ import { CreateRobotDTO, Robot } from './robot';
 
 const makeFakeCreateRobotDTO = (
   irrigablePatches = [{ x: 0, y: 0 }],
+  size = { width: 2, height: 2 },
+  initialPosition = { x: 0, y: 0 },
+  initialHeading = 'N',
 ): CreateRobotDTO => {
   const garden = Garden.create({
-    size: { width: 2, height: 2 },
+    size,
     irrigablePatches,
   }).value as Garden;
 
   return {
     garden,
+    initialPosition,
+    initialHeading,
   };
 };
 describe('Robot Entity', () => {
@@ -119,6 +124,23 @@ describe('Robot Entity', () => {
     expect(robot.heading).toEqual('N');
     expect(moveOrError.isRight()).toBeTruthy();
     expect(robot.movements).toEqual(['N']);
+  });
+
+  test('should be able to find for irrigable patch on heading direction', () => {
+    const robotOrError = Robot.create(
+      makeFakeCreateRobotDTO(
+        [{ x: 1, y: 1 }],
+        { width: 4, height: 4 },
+        { x: 1, y: 3 },
+      ),
+    );
+    const robot = robotOrError.isRight() ? robotOrError.value : null;
+
+    const searchOrError = robot.searchOnColumn();
+
+    expect(robot.heading).toEqual('N');
+    expect(searchOrError.isRight()).toBeTruthy();
+    expect(searchOrError.value).toEqual({ x: 1, y: 1 });
   });
 
   test('should be able to irrigate patch on success', () => {
