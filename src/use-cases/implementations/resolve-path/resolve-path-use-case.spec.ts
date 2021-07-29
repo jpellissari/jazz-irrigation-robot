@@ -144,6 +144,32 @@ describe('ResolvePath UseCase', () => {
     expect(response.movements.slice(0, 2)).toEqual(['M', 'M']);
   });
 
+  test('should move robot to irrigablePatch when irrigatePatch.y is greater than robot y position and robot is already at the right x coordinate', async () => {
+    const sut = new ResolvePathUseCase(
+      makeFakeGetRobotRepository({
+        irrigablePatches: [{ x: 1, y: 2 }],
+        initialPosition: { x: 1, y: 1 },
+        initialHeading: 'N',
+      }),
+    );
+    const response = await sut.execute();
+
+    expect(response.movements.slice(0, 1)).toEqual(['M']);
+  });
+
+  test('should move robot to irrigablePatch when irrigatePatch.y is smaller than robot y position and robot is already at the right x coordinate', async () => {
+    const sut = new ResolvePathUseCase(
+      makeFakeGetRobotRepository({
+        irrigablePatches: [{ x: 2, y: 1 }],
+        initialPosition: { x: 2, y: 2 },
+        initialHeading: 'S',
+      }),
+    );
+    const response = await sut.execute();
+
+    expect(response.movements.slice(0, 1)).toEqual(['M']);
+  });
+
   test('should irrigate patch', async () => {
     const sut = new ResolvePathUseCase(
       makeFakeGetRobotRepository({
