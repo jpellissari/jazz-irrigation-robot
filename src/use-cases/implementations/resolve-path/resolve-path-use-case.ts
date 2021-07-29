@@ -27,7 +27,7 @@ export class ResolvePathUseCase implements IResolvePathUseCase {
       if (irrigablePatch.y > this.robot.position.y) {
         this.turnRobotNorth();
         this.moveSteps(irrigablePatch.y - this.robot.position.y);
-      } else if (irrigablePatch.x < this.robot.position.x) {
+      } else if (irrigablePatch.y < this.robot.position.y) {
         this.turnRobotSouth();
         this.moveSteps(this.robot.position.y - irrigablePatch.y);
       }
